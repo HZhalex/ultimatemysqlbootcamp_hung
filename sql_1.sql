@@ -231,6 +231,56 @@ group by s.student_id, s.student_name, sub.subject_name
 ORDER BY s.student_id, sub.subject_name;
 
 -- bai 13
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Employee (id int, name varchar(255), department varchar(255), managerId int);
+Truncate table Employee;
+insert into Employee (id, name, department, managerId) values ('101', 'John', 'A', NULL);
+insert into Employee (id, name, department, managerId) values ('102', 'Dan', 'A', '101');
+insert into Employee (id, name, department, managerId) values ('103', 'James', 'A', '101');
+insert into Employee (id, name, department, managerId) values ('104', 'Amy', 'A', '101');
+insert into Employee (id, name, department, managerId) values ('105', 'Anne', 'A', '101');
+insert into Employee (id, name, department, managerId) values ('106', 'Ron', 'B', '101');
+
+
+SELECT e1.name
+FROM Employee e1
+JOIN Employee e2 ON  e1.id = e2.managerId
+GROUP BY e1.name
+HAVING COUNT(e2.managerId) >= 5;
+
+-- bai 14
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Signups (user_id int, time_stamp datetime);
+Create table If Not Exists Confirmations (user_id int, time_stamp datetime, action ENUM('confirmed','timeout'));
+Truncate table Signups;
+insert into Signups (user_id, time_stamp) values ('3', '2020-03-21 10:16:13');
+insert into Signups (user_id, time_stamp) values ('7', '2020-01-04 13:57:59');
+insert into Signups (user_id, time_stamp) values ('2', '2020-07-29 23:09:44');
+insert into Signups (user_id, time_stamp) values ('6', '2020-12-09 10:39:37');
+Truncate table Confirmations;
+insert into Confirmations (user_id, time_stamp, action) values ('3', '2021-01-06 03:30:46', 'timeout');
+insert into Confirmations (user_id, time_stamp, action) values ('3', '2021-07-14 14:00:00', 'timeout');
+insert into Confirmations (user_id, time_stamp, action) values ('7', '2021-06-12 11:57:29', 'confirmed');
+insert into Confirmations (user_id, time_stamp, action) values ('7', '2021-06-13 12:58:28', 'confirmed');
+insert into Confirmations (user_id, time_stamp, action) values ('7', '2021-06-14 13:59:27', 'confirmed');
+insert into Confirmations (user_id, time_stamp, action) values ('2', '2021-01-22 00:00:00', 'confirmed');
+insert into Confirmations (user_id, time_stamp, action) values ('2', '2021-02-28 23:59:59', 'timeout');
+
+
+select A.user_id ,round(ifnull(avg(action = "confirmed"),0),2) as confirmation_rate 
+from Signups as A
+left join Confirmations As B
+on A.user_id=B.user_id
+group by A.user_id;
+
+
+
+
+
 
 
 
