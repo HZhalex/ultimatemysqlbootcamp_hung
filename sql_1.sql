@@ -363,6 +363,133 @@ select customer_id from Customer
 group by customer_id
 having ( count( distinct product_key)) = (select count(product_key) from Product);
 
+-- bai 19:
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Project (project_id int, employee_id int);
+Create table If Not Exists Employee (employee_id int, name varchar(10), experience_years int);
+Truncate table Project;
+insert into Project (project_id, employee_id) values ('1', '1');
+insert into Project (project_id, employee_id) values ('1', '2');
+insert into Project (project_id, employee_id) values ('1', '3');
+insert into Project (project_id, employee_id) values ('2', '1');
+insert into Project (project_id, employee_id) values ('2', '4');
+Truncate table Employee;
+insert into Employee (employee_id, name, experience_years) values ('1', 'Khaled', '3');
+insert into Employee (employee_id, name, experience_years) values ('2', 'Ali', '2');
+insert into Employee (employee_id, name, experience_years) values ('3', 'John', '1');
+insert into Employee (employee_id, name, experience_years) values ('4', 'Doe', '2');
+
+select project_id,round(avg(e.experience_years),2) as average_years 
+from Project p join Employee e on p.employee_id = e.employee_id
+group by p.project_id
+order by 
+project_id;
+
+
+-- bai 20:
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Users (user_id int, user_name varchar(20));
+Create table If Not Exists Register (contest_id int, user_id int);
+Truncate table Users;
+insert into Users (user_id, user_name) values ('6', 'Alice');
+insert into Users (user_id, user_name) values ('2', 'Bob');
+insert into Users (user_id, user_name) values ('7', 'Alex');
+Truncate table Register;
+insert into Register (contest_id, user_id) values ('215', '6');
+insert into Register (contest_id, user_id) values ('209', '2');
+insert into Register (contest_id, user_id) values ('208', '2');
+insert into Register (contest_id, user_id) values ('210', '6');
+insert into Register (contest_id, user_id) values ('208', '6');
+insert into Register (contest_id, user_id) values ('209', '7');
+insert into Register (contest_id, user_id) values ('209', '6');
+insert into Register (contest_id, user_id) values ('215', '7');
+insert into Register (contest_id, user_id) values ('208', '7');
+insert into Register (contest_id, user_id) values ('210', '2');
+insert into Register (contest_id, user_id) values ('207', '2');
+insert into Register (contest_id, user_id) values ('210', '7');
+
+select * from users;
+select contest_id , round((count(*)/(select count(*) from Users) * 100),2) as percentage  
+from Register r join users u on r.user_id = u.user_id
+group by contest_id
+ORDER BY percentage DESC, contest_id;
+
+-- bai 21:
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Queries (query_name varchar(30), result varchar(50), position int, rating int);
+Truncate table Queries;
+insert into Queries (query_name, result, position, rating) values ('Dog', 'Golden Retriever', '1', '5');
+insert into Queries (query_name, result, position, rating) values ('Dog', 'German Shepherd', '2', '5');
+insert into Queries (query_name, result, position, rating) values ('Dog', 'Mule', '200', '1');
+insert into Queries (query_name, result, position, rating) values ('Cat', 'Shirazi', '5', '2');
+insert into Queries (query_name, result, position, rating) values ('Cat', 'Siamese', '3', '3');
+insert into Queries (query_name, result, position, rating) values ('Cat', 'Sphynx', '7', '4');
+
+select * from Queries;
+select 
+query_name , round(avg(rating/position),2) as quality, round((sum(CASE WHEN rating < 3 THEN 1 ELSE 0 END)/count(*))*100,2) as poor_query_percentage 
+from Queries
+group by query_name ;
+
+-- bai 22
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Delivery (delivery_id int, customer_id int, order_date date, customer_pref_delivery_date date);
+Truncate table Delivery;
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('1', '1', '2019-08-01', '2019-08-02');
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('2', '2', '2019-08-02', '2019-08-02');
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('3', '1', '2019-08-11', '2019-08-12');
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('4', '3', '2019-08-24', '2019-08-24');
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('5', '3', '2019-08-21', '2019-08-22');
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('6', '2', '2019-08-11', '2019-08-13');
+insert into Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date) values ('7', '4', '2019-08-09', '2019-08-09');
+
+
+select round(avg(order_date = customer_pref_delivery_date)*100,2) as immediate_percentage 
+from Delivery
+where (customer_id,order_date) in 
+(select customer_id, min(order_date)
+from Delivery
+group by customer_id)
+;
+
+-- bai 23
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Activity (player_id int, device_id int, event_date date, games_played int);
+Truncate table Activity;
+insert into Activity (player_id, device_id, event_date, games_played) values ('1', '2', '2016-03-01', '5');
+insert into Activity (player_id, device_id, event_date, games_played) values ('1', '2', '2016-03-02', '6');
+insert into Activity (player_id, device_id, event_date, games_played) values ('2', '3', '2017-06-25', '1');
+insert into Activity (player_id, device_id, event_date, games_played) values ('3', '1', '2016-03-02', '0');
+insert into Activity (player_id, device_id, event_date, games_played) values ('3', '4', '2018-07-03', '5');
+
+select * from Activity;
+
+select round(count(DISTINCT player_id)/ (select count(distinct player_id) from activity),2) as fraction  
+from activity 
+where (player_id,DATE_SUB(event_date, INTERVAL 1 DAY)) in 
+(select player_id,MIN(event_date) as first_login
+from activity
+group by player_id)
+;
+
+
+
+
+
+
+
+
+
 
 
 
