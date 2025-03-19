@@ -482,19 +482,55 @@ from activity
 group by player_id)
 ;
 
+-- bai 24:
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Teacher (teacher_id int, subject_id int, dept_id int);
+Truncate table Teacher;
+insert into Teacher (teacher_id, subject_id, dept_id) values ('1', '2', '3');
+insert into Teacher (teacher_id, subject_id, dept_id) values ('1', '2', '4');
+insert into Teacher (teacher_id, subject_id, dept_id) values ('1', '3', '3');
+insert into Teacher (teacher_id, subject_id, dept_id) values ('2', '1', '1');
+insert into Teacher (teacher_id, subject_id, dept_id) values ('2', '2', '1');
+insert into Teacher (teacher_id, subject_id, dept_id) values ('2', '3', '1');
+insert into Teacher (teacher_id, subject_id, dept_id) values ('2', '4', '1');
+
+select * from teacher;
+
+select teacher_id,  count( distinct subject_id) as cnt 
+from teacher
+group by teacher_id;
 
 
+-- bai 25:
+drop database hung;
+create database hung;
+use hung; 
+Create table If Not Exists Activity (user_id int, session_id int, activity_date date, activity_type ENUM('open_session', 'end_session', 'scroll_down', 'send_message'));
+Truncate table Activity;
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('1', '1', '2019-07-20', 'open_session');
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('1', '1', '2019-07-20', 'scroll_down');
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('1', '1', '2019-07-20', 'end_session');
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('2', '4', '2019-07-20', 'open_session');
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('2', '4', '2019-07-21', 'send_message');
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('2', '4', '2019-07-21', 'end_session');
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('3', '2', '2019-07-21', 'open_session');
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('3', '2', '2019-07-21', 'send_message');
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('3', '2', '2019-07-21', 'end_session');
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('4', '3', '2019-06-25', 'open_session');
+insert into Activity (user_id, session_id, activity_date, activity_type) values ('4', '3', '2019-06-25', 'end_session');
 
+select * from activity ;
+select activity_date as day , count(distinct user_id) as active_users
+from activity
+WHERE (activity_date > "2019-06-27" AND activity_date <= "2019-07-27")
+group by activity_date;
 
-
-
-
-
-
-
-
-
-
+SELECT activity_date AS day, COUNT(DISTINCT user_id) AS active_users
+FROM activity
+GROUP BY activity_date
+HAVING activity_date >= DATE_SUB('2019-07-27', INTERVAL 30 DAY);
 
 
 
