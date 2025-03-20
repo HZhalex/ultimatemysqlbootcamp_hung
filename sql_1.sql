@@ -532,6 +532,105 @@ FROM activity
 GROUP BY activity_date
 HAVING activity_date >= DATE_SUB('2019-07-27', INTERVAL 30 DAY);
 
+-- bai 26:
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Courses (student varchar(255), class varchar(255));
+Truncate table Courses;
+insert into Courses (student, class) values ('A', 'Math');
+insert into Courses (student, class) values ('B', 'English');
+insert into Courses (student, class) values ('C', 'Math');
+insert into Courses (student, class) values ('D', 'Biology');
+insert into Courses (student, class) values ('E', 'Math');
+insert into Courses (student, class) values ('F', 'Computer');
+insert into Courses (student, class) values ('G', 'Math');
+insert into Courses (student, class) values ('H', 'Math');
+insert into Courses (student, class) values ('I', 'Math');
+
+select * from courses;
+select class from courses
+group by class
+having count(*) >= 5;
+
+-- bai 27:
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Sales (sale_id int, product_id int, year int, quantity int, price int);
+Create table If Not Exists Product (product_id int, product_name varchar(10));
+Truncate table Sales;
+insert into Sales (sale_id, product_id, year, quantity, price) values ('1', '100', '2008', '10', '5000');
+insert into Sales (sale_id, product_id, year, quantity, price) values ('2', '100', '2009', '12', '5000');
+insert into Sales (sale_id, product_id, year, quantity, price) values ('7', '200', '2011', '15', '9000');
+Truncate table Product;
+insert into Product (product_id, product_name) values ('100', 'Nokia');
+insert into Product (product_id, product_name) values ('200', 'Apple');
+insert into Product (product_id, product_name) values ('300', 'Samsung');
+
+
+select * from product;
+select product_id ,  year as first_year , quantity , price
+from sales
+where (product_id , year) in
+(select product_id , min(year)
+from sales
+group by product_id);
+
+-- bai 28:
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Followers(user_id int, follower_id int);
+Truncate table Followers;
+insert into Followers (user_id, follower_id) values ('0', '1');
+insert into Followers (user_id, follower_id) values ('1', '0');
+insert into Followers (user_id, follower_id) values ('2', '0');
+insert into Followers (user_id, follower_id) values ('2', '1');
+
+select user_id,count(*) as  followers_count
+from Followers
+group by user_id
+order by user_id ; 
+
+-- bai 29:
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists MyNumbers (num int);
+Truncate table MyNumbers;
+insert into MyNumbers (num) values ('8');
+insert into MyNumbers (num) values ('8');
+insert into MyNumbers (num) values ('3');
+insert into MyNumbers (num) values ('3');
+insert into MyNumbers (num) values ('1');
+insert into MyNumbers (num) values ('4');
+insert into MyNumbers (num) values ('5');
+insert into MyNumbers (num) values ('6');
+
+select max(num) as num  
+from
+( 
+select num 
+from MyNumbers
+group by num
+having count(num) = 1
+)
+as hung;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
