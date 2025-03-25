@@ -658,13 +658,39 @@ group by employee_id
 having count(employee_id) = 1)
 ;
 
+-- bai 32:
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Triangle (x int, y int, z int);
+Truncate table Triangle;
+insert into Triangle (x, y, z) values ('13', '15', '30');
+insert into Triangle (x, y, z) values ('10', '20', '15');
 
+select *,if(x+y > z and x+z > y and y+z > x,"Yes","No") as triangle
+from triangle;
 
+-- bai 32:
+drop database hung;
+create database hung;
+use hung;
+Create table If Not Exists Logs (id int, num int);
+Truncate table Logs;
+insert into Logs (id, num) values ('1', '1');
+insert into Logs (id, num) values ('2', '1');
+insert into Logs (id, num) values ('3', '1');
+insert into Logs (id, num) values ('4', '2');
+insert into Logs (id, num) values ('5', '1');
+insert into Logs (id, num) values ('6', '2');
+insert into Logs (id, num) values ('7', '2');
 
-
-
-
-
+with hung as (
+	select num,
+		lead(num,1) over() as num1,
+        lead(num,2) over() as num2
+	from logs
+)
+select distinct num as ConsecutiveNums  from hung where num = num1 and num = num2;
 
 
 
